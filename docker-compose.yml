@@ -28,6 +28,7 @@ services:
     build:
       context: .
       dockerfile: ./.docker/dockerfiles/Dockerfile
+    entrypoint: ["sh", "./.docker/entrypoints/entrypoint-dev.sh"]
     container_name: kitkit-back-go
     restart: always
     ports:
