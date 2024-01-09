@@ -31,6 +31,12 @@ services:
     entrypoint: ["sh", "./.docker/entrypoints/entrypoint-dev.sh"]
     container_name: kitkit-back-go
     restart: always
+    environment:
+      HOST: host.docker.internal
+      PORT: 5432
+      USER: postgres
+      DB_NAME: postgres
+      PASSWORD: postgres
     ports:
       - 3000:3000
     networks:

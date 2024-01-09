@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/RafaelCava/kitkit-back-go/cmd/infra/database"
 	"github.com/RafaelCava/kitkit-back-go/cmd/main/routes"
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,7 @@ var router = gin.Default()
 // Run will start the server
 func Init() {
 	getRoutes()
+	database.ConnectDatabase()
 	router.Run(":3000")
 }
 
