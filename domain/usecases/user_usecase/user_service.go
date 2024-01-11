@@ -1,4 +1,4 @@
-// domain_layer/user_usecase/user_service.go - Camada de Domínio
+// domain/usecases/user_usecase/user_service.go - Camada de Domínio
 package user_usecase
 
 import (
