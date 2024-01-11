@@ -1,4 +1,4 @@
-// domain_layer/user_models/user.go - Camada de Domínio
+// domain_layer/models/user_models/user.go - Camada de Domínio
 package user_models
 
 // User representa um modelo de usuário.

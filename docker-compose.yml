@@ -29,6 +29,7 @@ services:
       context: .
       dockerfile: ./.docker/dockerfiles/Dockerfile
     entrypoint: ["sh", "./.docker/entrypoints/entrypoint-dev.sh"]
+    # image: rafaelcava1/kitkit-back-go:v6
     container_name: kitkit-back-go
     restart: always
     environment:

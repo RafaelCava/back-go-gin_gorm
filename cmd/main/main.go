@@ -1,4 +1,4 @@
-// main.go - Camada Principal
+// cmd/main/main.go - Camada Principal
 package main
 
 import (
@@ -6,10 +6,10 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/RafaelCava/kitkit-back-go/cmd/domain/user_models"
-	"github.com/RafaelCava/kitkit-back-go/cmd/domain/user_usecase"
-	"github.com/RafaelCava/kitkit-back-go/cmd/infra/user_repository"
-	presentation "github.com/RafaelCava/kitkit-back-go/cmd/presentation/user_controller"
+	"github.com/RafaelCava/kitkit-back-go/domain/models/user_models"
+	"github.com/RafaelCava/kitkit-back-go/domain/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/infra/user_repository"
+	presentation "github.com/RafaelCava/kitkit-back-go/presentation/user_controller"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

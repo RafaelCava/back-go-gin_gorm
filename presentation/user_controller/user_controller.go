@@ -2,7 +2,7 @@
 package presentation
 
 import (
-	"github.com/RafaelCava/kitkit-back-go/cmd/domain/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/domain/user_usecase"
 	"github.com/gin-gonic/gin"
 )
 

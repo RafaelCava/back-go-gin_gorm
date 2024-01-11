@@ -2,7 +2,7 @@
 package user_repository
 
 import (
-	"github.com/RafaelCava/kitkit-back-go/cmd/domain/user_models"
+	"github.com/RafaelCava/kitkit-back-go/domain/models/user_models"
 	"gorm.io/gorm"
 )
 
