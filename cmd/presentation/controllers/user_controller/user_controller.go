@@ -1,8 +1,8 @@
-// presentation/user_controller.go - Camada de Apresentação (Presentation Layer)
-package presentation
+// presentation/controller/user_controller/user_controller.go - Camada de Apresentação (Presentation Layer)
+package user_controller
 
 import (
-	"github.com/RafaelCava/kitkit-back-go/domain/usecases/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/cmd/domain/usecases/user_usecase"
 	"github.com/gin-gonic/gin"
 )
 

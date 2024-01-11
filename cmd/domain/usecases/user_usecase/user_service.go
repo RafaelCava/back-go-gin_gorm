@@ -2,8 +2,8 @@
 package user_usecase
 
 import (
-	"github.com/RafaelCava/kitkit-back-go/domain/models/user_models"
-	infra "github.com/RafaelCava/kitkit-back-go/infra/repositories/user_repository"
+	"github.com/RafaelCava/kitkit-back-go/cmd/domain/models/user_models"
+	infra "github.com/RafaelCava/kitkit-back-go/cmd/infra/repositories/user_repository"
 )
 
 // UserService é uma interface que define operações relacionadas ao usuário.

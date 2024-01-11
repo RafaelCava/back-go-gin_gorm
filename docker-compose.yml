@@ -7,7 +7,7 @@ networks:
 services:
   postgres:
     image: postgres
-    restart: on-failure
+    restart: always
     ports:
       - 5432:5432
     container_name: postgres
