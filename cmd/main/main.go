@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	"github.com/RafaelCava/kitkit-back-go/domain/models/user_models"
-	"github.com/RafaelCava/kitkit-back-go/domain/user_usecase"
-	"github.com/RafaelCava/kitkit-back-go/infra/user_repository"
+	"github.com/RafaelCava/kitkit-back-go/domain/usecases/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/infra/repositories/user_repository"
 	presentation "github.com/RafaelCava/kitkit-back-go/presentation/user_controller"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
