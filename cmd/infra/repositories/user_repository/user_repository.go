@@ -1,4 +1,4 @@
-// infra/user_repository/user_repository.go - Camada de Dados (Data Layer)
+// infra/repository/user_repository/user_repository.go - Camada de Dados (Data Layer)
 package user_repository
 
 import (
