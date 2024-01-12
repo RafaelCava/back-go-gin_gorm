@@ -37,7 +37,6 @@ func newMigrateModels() {
 func NewUserController() *presentation.UserController {
 	userRepository := user_repository.NewGormUserRepository(db)
 	userService := user_usecase.NewUserServiceImpl(userRepository)
-	// Configurar controladores
 	userController := presentation.NewUserController(userService)
 	return userController
 }
