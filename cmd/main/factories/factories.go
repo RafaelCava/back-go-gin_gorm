@@ -1,12 +1,12 @@
-// cmd/main/factories/database/database.go - Camada Principal - Factories
-
-package database
+// cmd/main/factories/factories.go - Camada Principal - Factories
+package factories
 
 import (
 	"fmt"
 	"os"
 	"strconv"
 
+	"github.com/RafaelCava/kitkit-back-go/cmd/domain/models/user_models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -20,4 +20,9 @@ func NewDatabaseOpenConnection() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=America/Sao_Paulo", host, user, pass, dbname, port)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	return db, err
+}
+
+func NewMigrateModels(db *gorm.DB) {
+	// Migrar modelos para o banco de dados
+	db.AutoMigrate(&user_models.User{})
 }
