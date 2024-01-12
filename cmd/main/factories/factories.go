@@ -34,9 +34,9 @@ func newMigrateModels() {
 	db.AutoMigrate(&user_models.User{})
 }
 
-func NewUserController() *presentation.UserController {
+func NewUserController() *presentation.UserControllerImpl {
 	userRepository := user_repository.NewGormUserRepository(db)
 	userService := user_usecase.NewUserServiceImpl(userRepository)
-	userController := presentation.NewUserController(userService)
+	userController := presentation.NewUserControllerImpl(userService)
 	return userController
 }
