@@ -7,6 +7,9 @@ import (
 	"strconv"
 
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/models/user_models"
+	"github.com/RafaelCava/kitkit-back-go/cmd/domain/usecases/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/cmd/infra/repositories/user_repository"
+	presentation "github.com/RafaelCava/kitkit-back-go/cmd/presentation/controllers/user_controller"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -25,4 +28,12 @@ func NewDatabaseOpenConnection() (*gorm.DB, error) {
 func NewMigrateModels(db *gorm.DB) {
 	// Migrar modelos para o banco de dados
 	db.AutoMigrate(&user_models.User{})
+}
+
+func NewUserController(db *gorm.DB) *presentation.UserController {
+	userRepository := user_repository.NewGormUserRepository(db)
+	userService := user_usecase.NewUserServiceImpl(userRepository)
+	// Configurar controladores
+	userController := presentation.NewUserController(userService)
+	return userController
 }
