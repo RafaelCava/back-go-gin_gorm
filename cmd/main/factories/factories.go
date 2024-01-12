@@ -14,23 +14,27 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewDatabaseOpenConnection() (*gorm.DB, error) {
+var db *gorm.DB
+
+func NewDatabaseOpenConnection() error {
 	host := os.Getenv("HOST")
 	port, _ := strconv.Atoi(os.Getenv("PORT")) // don't forget to convert int since port is int type.
 	user := os.Getenv("USER")
 	dbname := os.Getenv("DB_NAME")
 	pass := os.Getenv("PASSWORD")
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=America/Sao_Paulo", host, user, pass, dbname, port)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	return db, err
+	con, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db = con
+	newMigrateModels()
+	return err
 }
 
-func NewMigrateModels(db *gorm.DB) {
+func newMigrateModels() {
 	// Migrar modelos para o banco de dados
 	db.AutoMigrate(&user_models.User{})
 }
 
-func NewUserController(db *gorm.DB) *presentation.UserController {
+func NewUserController() *presentation.UserController {
 	userRepository := user_repository.NewGormUserRepository(db)
 	userService := user_usecase.NewUserServiceImpl(userRepository)
 	// Configurar controladores
