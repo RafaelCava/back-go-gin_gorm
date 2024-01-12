@@ -10,6 +10,7 @@ import (
 type UserService interface {
 	GetUserByID(userID string) (*user_models.User, error)
 	CreateUser(user *user_models.User) (string, error)
+	FindAll() ([]*user_models.User, error)
 }
 
 // UserServiceImpl implementa UserService usando um UserRepository.
@@ -29,4 +30,8 @@ func (s *UserServiceImpl) GetUserByID(userID string) (*user_models.User, error) 
 
 func (s *UserServiceImpl) CreateUser(user *user_models.User) (string, error) {
 	return s.userRepository.Create(user)
+}
+
+func (s *UserServiceImpl) FindAll() ([]*user_models.User, error) {
+	return s.userRepository.Find()
 }
