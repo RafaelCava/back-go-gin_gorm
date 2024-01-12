@@ -9,6 +9,7 @@ import (
 // UserRepository é uma interface que define operações de banco de dados relacionadas ao usuário.
 type UserRepository interface {
 	FindByID(userID string) (*user_models.User, error)
+	Find() ([]*user_models.User, error)
 	Create(user *user_models.User) (string, error)
 }
 
@@ -36,4 +37,12 @@ func (r *GormUserRepository) Create(user *user_models.User) (string, error) {
 		return "", err
 	}
 	return user.ID, nil
+}
+
+func (r *GormUserRepository) Find() ([]*user_models.User, error) {
+	var users []*user_models.User
+	if err := r.db.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
