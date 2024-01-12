@@ -6,6 +6,8 @@ import (
 
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/models/user_models"
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/usecases/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/cmd/presentation/utils/http_util"
+	_ "github.com/RafaelCava/kitkit-back-go/docs"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -34,6 +36,17 @@ func (controller *UserControllerImpl) RegisterRoutes(router *gin.RouterGroup) {
 	router.POST("", controller.createUser)
 }
 
+// GetUserById godoc
+//
+//		@Summary		Retorna um usuário
+//		@Description	Retorna um usuário pelo ID
+//		@Tags			Users
+//		@Accept			json
+//		@Produce		json
+//		@Param			id	path		string	true	"User ID"
+//	  @Success		200	{object}	user_models.User
+//	  @Failure		400	{object}	http_util.HTTPError
+//		@Router			/users/{id} [get]
 func (controller *UserControllerImpl) getUserByID(c *gin.Context) {
 	userID := c.Param("id")
 	// Converter userID para uint ou lidar com erros, dependendo da sua lógica
@@ -42,7 +55,7 @@ func (controller *UserControllerImpl) getUserByID(c *gin.Context) {
 	// Obter usuário usando o serviço de usuário
 	user, err := controller.userService.GetUserByID(userID)
 	if err != nil {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Falha ao obter usuário"})
+		http_util.NewError(c, http.StatusBadRequest, err)
 		return
 	}
 
@@ -50,10 +63,20 @@ func (controller *UserControllerImpl) getUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// GetAllUsers godoc
+//
+//	@Summary		Retorna todos os usuários
+//	@Description	Retorna todos os usuários
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}	user_models.User
+//	@Failure		400	{object}	http_util.HTTPError
+//	@Router			/users [get]
 func (controller *UserControllerImpl) getAllUsers(c *gin.Context) {
 	users, err := controller.userService.FindAll()
 	if err != nil {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Falha ao obter usuários"})
+		http_util.NewError(c, http.StatusBadRequest, err)
 		return
 	}
 
@@ -66,10 +89,20 @@ type CreateUserRequest struct {
 	Password string  `json:"password"`
 }
 
+// CreateUser godoc
+//
+//	@Summary		Cria um usuário
+//	@Description	Recurso de criação
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		user_controller.CreateUserRequest	true	"Add User"
+//	@Failure		400	{object}	http_util.HTTPError
+//	@Router			/users [post]
 func (controller *UserControllerImpl) createUser(c *gin.Context) {
 	var request CreateUserRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Falha ao criar usuário"})
+		http_util.NewError(c, http.StatusBadRequest, http.ErrBodyNotAllowed)
 		return
 	}
 	user := &user_models.User{
@@ -80,7 +113,7 @@ func (controller *UserControllerImpl) createUser(c *gin.Context) {
 	}
 	userID, err := controller.userService.CreateUser(user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Falha ao criar usuário"})
+		http_util.NewError(c, http.StatusBadRequest, http.ErrAbortHandler)
 		return
 	}
 
