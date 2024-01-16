@@ -19,6 +19,46 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Autentica um usuário pela senha",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Autentica um usuário",
+                "parameters": [
+                    {
+                        "description": "Authenticate",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth_usecase.AuthLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Autorizado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http_util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Retorna todos os usuários",
@@ -38,7 +78,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/user_models.User"
+                                "$ref": "#/definitions/user_models.UserWithoutPassword"
                             }
                         }
                     },
@@ -74,6 +114,9 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -109,7 +152,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_models.User"
+                            "$ref": "#/definitions/user_models.UserWithoutPassword"
                         }
                     },
                     "400": {
@@ -123,6 +166,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "auth_usecase.AuthLoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "http_util.HTTPError": {
             "type": "object",
             "properties": {
@@ -136,7 +194,7 @@ const docTemplate = `{
                 }
             }
         },
-        "user_models.User": {
+        "user_models.UserWithoutPassword": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -149,9 +207,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
-                },
-                "password": {
                     "type": "string"
                 },
                 "updated_at": {

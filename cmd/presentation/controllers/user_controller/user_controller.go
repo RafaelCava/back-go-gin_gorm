@@ -45,7 +45,7 @@ func (controller *UserControllerImpl) RegisterRoutes(router *gin.RouterGroup) {
 //		@Accept			json
 //		@Produce		json
 //		@Param			id	path		string	true	"User ID"
-//	  @Success		200	{object}	user_models.User
+//	  @Success		200	{object}	user_models.UserWithoutPassword
 //	  @Failure		400	{object}	http_util.HTTPError
 //		@Router			/users/{id} [get]
 func (controller *UserControllerImpl) getUserByID(c *gin.Context) {
@@ -61,7 +61,13 @@ func (controller *UserControllerImpl) getUserByID(c *gin.Context) {
 	}
 
 	// Responder com o usuário
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, user_usecase.GetUserByIDResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt.String(),
+		UpdatedAt: user.UpdatedAt.String(),
+	})
 }
 
 // GetAllUsers godoc
@@ -71,7 +77,7 @@ func (controller *UserControllerImpl) getUserByID(c *gin.Context) {
 //	@Tags			Users
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}	user_models.User
+//	@Success		200	{array}	user_models.UserWithoutPassword
 //	@Failure		400	{object}	http_util.HTTPError
 //	@Router			/users [get]
 func (controller *UserControllerImpl) getAllUsers(c *gin.Context) {
@@ -92,6 +98,7 @@ func (controller *UserControllerImpl) getAllUsers(c *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			user	body		user_usecase.CreateUserRequest	true	"Add User"
+//	@Success		201
 //	@Failure		400	{object}	http_util.HTTPError
 //	@Router			/users [post]
 func (controller *UserControllerImpl) createUser(c *gin.Context) {
@@ -118,5 +125,5 @@ func (controller *UserControllerImpl) createUser(c *gin.Context) {
 	}
 
 	// Responder com o ID do usuário
-	c.JSON(http.StatusOK, gin.H{"id": userID})
+	c.JSON(http.StatusCreated, gin.H{"id": userID})
 }

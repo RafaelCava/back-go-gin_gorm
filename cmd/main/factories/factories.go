@@ -7,9 +7,12 @@ import (
 	"strconv"
 
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/models/user_models"
+	"github.com/RafaelCava/kitkit-back-go/cmd/domain/usecases/auth_usecase"
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/usecases/user_usecase"
+	"github.com/RafaelCava/kitkit-back-go/cmd/infra/encrypter_adapter"
 	"github.com/RafaelCava/kitkit-back-go/cmd/infra/repositories/user_repository"
-	presentation "github.com/RafaelCava/kitkit-back-go/cmd/presentation/controllers/user_controller"
+	"github.com/RafaelCava/kitkit-back-go/cmd/presentation/controllers/auth_controller"
+	"github.com/RafaelCava/kitkit-back-go/cmd/presentation/controllers/user_controller"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -34,9 +37,17 @@ func newMigrateModels() {
 	db.AutoMigrate(&user_models.User{})
 }
 
-func NewUserController() *presentation.UserControllerImpl {
+func NewUserController() *user_controller.UserControllerImpl {
 	userRepository := user_repository.NewGormUserRepository(db)
 	userService := user_usecase.NewUserServiceImpl(userRepository)
-	userController := presentation.NewUserControllerImpl(userService)
+	userController := user_controller.NewUserControllerImpl(userService)
 	return userController
+}
+
+func NewAuthController() *auth_controller.AuthControllerImpl {
+	userRepository := user_repository.NewGormUserRepository(db)
+	encrypterAdapter := encrypter_adapter.NewEncrypterAdapterImpl()
+	authService := auth_usecase.NewAuthServiceImpl(userRepository, encrypterAdapter)
+	authController := auth_controller.NewAuthControllerImpl(authService)
+	return authController
 }

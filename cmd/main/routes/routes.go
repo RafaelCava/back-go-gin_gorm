@@ -15,5 +15,6 @@ func Run() {
 func getRoutes() {
 	apiPrefix := router.Group("/api")
 	addUserRoutes(apiPrefix)
+	addAuthRoutes(apiPrefix)
 	addDocsRoutes(apiPrefix)
 }

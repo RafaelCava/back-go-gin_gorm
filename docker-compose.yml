@@ -38,6 +38,7 @@ services:
       USER: postgres
       DB_NAME: postgres
       PASSWORD: postgres
+      SECRET: 123456
     ports:
       - 3000:3000
     networks:

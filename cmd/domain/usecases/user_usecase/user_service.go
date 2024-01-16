@@ -8,9 +8,9 @@ import (
 
 // UserService é uma interface que define operações relacionadas ao usuário.
 type UserService interface {
-	GetUserByID(userID string) (*user_models.User, error)
+	GetUserByID(userID string) (*user_models.UserWithoutPassword, error)
 	CreateUser(user *user_models.User) (string, error)
-	FindAll() ([]*user_models.User, error)
+	FindAll() ([]*user_models.UserWithoutPassword, error)
 }
 
 // UserServiceImpl implementa UserService usando um UserRepository.
@@ -24,7 +24,7 @@ func NewUserServiceImpl(userRepository infra.UserRepository) *UserServiceImpl {
 }
 
 // GetUserByID recupera um usuário por ID usando o UserRepository.
-func (s *UserServiceImpl) GetUserByID(userID string) (*user_models.User, error) {
+func (s *UserServiceImpl) GetUserByID(userID string) (*user_models.UserWithoutPassword, error) {
 	return s.userRepository.FindByID(userID)
 }
 
@@ -32,6 +32,6 @@ func (s *UserServiceImpl) CreateUser(user *user_models.User) (string, error) {
 	return s.userRepository.Create(user)
 }
 
-func (s *UserServiceImpl) FindAll() ([]*user_models.User, error) {
+func (s *UserServiceImpl) FindAll() ([]*user_models.UserWithoutPassword, error) {
 	return s.userRepository.Find()
 }

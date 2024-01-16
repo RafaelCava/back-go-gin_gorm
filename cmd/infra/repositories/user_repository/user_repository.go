@@ -8,8 +8,9 @@ import (
 
 // UserRepository é uma interface que define operações de banco de dados relacionadas ao usuário.
 type UserRepository interface {
-	FindByID(userID string) (*user_models.User, error)
-	Find() ([]*user_models.User, error)
+	FindByID(userID string) (*user_models.UserWithoutPassword, error)
+	FindByEmail(email string) (*user_models.User, error)
+	Find() ([]*user_models.UserWithoutPassword, error)
 	Create(user *user_models.User) (string, error)
 }
 
@@ -24,12 +25,18 @@ func NewGormUserRepository(db *gorm.DB) *GormUserRepository {
 }
 
 // FindByID recupera um usuário por ID do banco de dados usando Gorm.
-func (r *GormUserRepository) FindByID(userID string) (*user_models.User, error) {
+func (r *GormUserRepository) FindByID(userID string) (*user_models.UserWithoutPassword, error) {
 	var user user_models.User
 	if err := r.db.First(&user, "id = ?", userID).Error; err != nil {
 		return nil, err
 	}
-	return &user, nil
+
+	return &user_models.UserWithoutPassword{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+	}, nil
 }
 
 func (r *GormUserRepository) Create(user *user_models.User) (string, error) {
@@ -39,10 +46,29 @@ func (r *GormUserRepository) Create(user *user_models.User) (string, error) {
 	return user.ID, nil
 }
 
-func (r *GormUserRepository) Find() ([]*user_models.User, error) {
+func (r *GormUserRepository) Find() ([]*user_models.UserWithoutPassword, error) {
 	var users []*user_models.User
-	if err := r.db.Find(&users).Error; err != nil {
+	var usersWithoutPassword []*user_models.UserWithoutPassword
+	if err := r.db.Select([]string{"id", "name", "email", "created_at", "updated_at"}).Find(&users).Error; err != nil {
 		return nil, err
 	}
-	return users, nil
+	for _, user := range users {
+		usersWithoutPassword = append(usersWithoutPassword, &user_models.UserWithoutPassword{
+			ID:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		})
+	}
+	return usersWithoutPassword, nil
+}
+
+func (r *GormUserRepository) FindByEmail(email string) (*user_models.User, error) {
+	var user user_models.User
+	if err := r.db.First(&user, "email = ?", email).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }

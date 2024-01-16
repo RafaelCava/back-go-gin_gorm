@@ -12,3 +12,11 @@ type User struct {
 	CreatedAt time.Time `gorm:"index" json:"created_at"`
 	UpdatedAt time.Time `gorm:"index" json:"updated_at"`
 }
+
+type UserWithoutPassword struct {
+	ID        string    `gorm:"primaryKey" json:"id"`
+	Name      *string   `json:"name"`
+	Email     string    `gorm:"unique;not null" json:"email"`
+	CreatedAt time.Time `gorm:"index" json:"created_at"`
+	UpdatedAt time.Time `gorm:"index" json:"updated_at"`
+}
