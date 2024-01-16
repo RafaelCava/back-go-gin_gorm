@@ -3,8 +3,9 @@ FROM golang:1.21 as builder
 WORKDIR /app
 
 COPY . .
-
+RUN go install github.com/swaggo/swag/cmd/swag@latest
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o main ./cmd/main
+RUN CGO_ENABLED=0 swag init -g ./cmd/main/main.go -o cmd/main/docs
 
 FROM scratch as production
 
