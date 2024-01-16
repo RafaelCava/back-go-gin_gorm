@@ -6,10 +6,11 @@ import (
 
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/models/user_models"
 	"github.com/RafaelCava/kitkit-back-go/cmd/domain/usecases/user_usecase"
+	_ "github.com/RafaelCava/kitkit-back-go/cmd/main/docs"
 	"github.com/RafaelCava/kitkit-back-go/cmd/presentation/utils/http_util"
-	_ "github.com/RafaelCava/kitkit-back-go/docs"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController interface {
@@ -83,12 +84,6 @@ func (controller *UserControllerImpl) getAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-type CreateUserRequest struct {
-	Name     *string `json:"name"`
-	Email    string  `json:"email"`
-	Password string  `json:"password"`
-}
-
 // CreateUser godoc
 //
 //	@Summary		Cria um usuário
@@ -96,12 +91,17 @@ type CreateUserRequest struct {
 //	@Tags			Users
 //	@Accept			json
 //	@Produce		json
-//	@Param			user	body		user_controller.CreateUserRequest	true	"Add User"
+//	@Param			user	body		user_usecase.CreateUserRequest	true	"Add User"
 //	@Failure		400	{object}	http_util.HTTPError
 //	@Router			/users [post]
 func (controller *UserControllerImpl) createUser(c *gin.Context) {
-	var request CreateUserRequest
+	var request user_usecase.CreateUserRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
+		http_util.NewError(c, http.StatusBadRequest, http.ErrBodyNotAllowed)
+		return
+	}
+	hashPass, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+	if err != nil {
 		http_util.NewError(c, http.StatusBadRequest, http.ErrBodyNotAllowed)
 		return
 	}
@@ -109,7 +109,7 @@ func (controller *UserControllerImpl) createUser(c *gin.Context) {
 		ID:       uuid.New().String(),
 		Name:     request.Name,
 		Email:    request.Email,
-		Password: request.Password,
+		Password: string(hashPass),
 	}
 	userID, err := controller.userService.CreateUser(user)
 	if err != nil {

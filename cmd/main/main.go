@@ -2,7 +2,7 @@
 package main
 
 import (
-	_ "github.com/RafaelCava/kitkit-back-go/docs"
+	_ "github.com/RafaelCava/kitkit-back-go/cmd/main/docs"
 
 	"github.com/RafaelCava/kitkit-back-go/cmd/main/factories"
 	"github.com/RafaelCava/kitkit-back-go/cmd/main/routes"
